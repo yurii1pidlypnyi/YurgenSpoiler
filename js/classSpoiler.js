@@ -2,7 +2,7 @@ class YurgenSpoiler {
   constructor(spoiler){
     this.spoiler = spoiler;
     this.options = {};
-
+    this.options.openedSpoiler = [];
     this.fillOptions();
 
     if(this.options.type === 'simple'){
@@ -20,7 +20,8 @@ class YurgenSpoiler {
       switch (attr) {
         case 'spollers' :
           if(dataList[attr]){
-            this.options.type = 'media'
+            this.options.type = 'media';
+            this.options.wasInited = false;
             this.mediaQuery = dataList[attr];
           }else {
             this.options.type = 'simple'
@@ -28,7 +29,6 @@ class YurgenSpoiler {
         break
         case 'accordion' : 
           this.options.accordion = true;
-          this.options.openedSpoiler = [];
           break
         case 'missClick' :
           this.options.missClick = true;
@@ -47,13 +47,16 @@ class YurgenSpoiler {
     let btnsSpoiler = this.spoiler.querySelectorAll('[data-spoller]');
     btnsSpoiler.forEach(item => {
       item.nextElementSibling.hidden = true;
-      item.addEventListener('click', this.clickBtnSpoiler)
+      if(!this.options.wasInited){
+        item.addEventListener('click', () => {
+          if(item.classList.contains('active')){
+            this.closeSpoiler([item])
+          } else {
+            this.openSpoiler(item)
+          }
+        })
+      }
     })
-  }
-
-  clickBtnSpoiler(){
-    this.classList.toggle('active');
-    slideToggle(this.nextElementSibling)
   }
 
   cancelInitSpoiler(){
@@ -61,9 +64,10 @@ class YurgenSpoiler {
     btnsSpoiler.forEach(item => {
       item.nextElementSibling.removeAttribute('hidden');
       item.classList.remove('active')
-      item.removeEventListener('click', this.clickBtnSpoiler);
     })
-    this.spoiler.classList.remove('is-init')
+    this.options.openedSpoiler = [];
+    this.options.wasInited = true;
+    this.spoiler.classList.remove('is-init');
   }
 
   createMediaQuery(){
@@ -79,6 +83,7 @@ class YurgenSpoiler {
       this.checkMediaQuery()
     })
   }
+
   checkMediaQuery(){
     if(this.mediaQuery.matches){
       this.initSpoiler()
@@ -87,6 +92,27 @@ class YurgenSpoiler {
     if(!this.mediaQuery.matches && this.spoiler.classList.contains('is-init')){
       this.cancelInitSpoiler()
     }
+  }
+
+  openSpoiler(spoiler){
+    if(this.options.accordion){
+      console.log(this.options.openedSpoiler)
+      if(this.options.openedSpoiler.length){
+        this.closeSpoiler(this.options.openedSpoiler)
+      }
+    }
+    spoiler.classList.add('active');
+    slideOpen(spoiler.nextElementSibling);
+    this.options.openedSpoiler.push(spoiler)
+  }
+
+  closeSpoiler(array){
+    array.forEach(item => {
+      item.classList.remove('active');
+      slideClose(item.nextElementSibling);
+      this.options.openedSpoiler.splice(this.options.openedSpoiler.indexOf(item),1)
+    })
+    console.log(this.options.openedSpoiler)
   }
 }
 
