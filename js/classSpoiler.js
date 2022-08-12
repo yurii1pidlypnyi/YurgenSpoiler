@@ -49,6 +49,9 @@ class YurgenSpoiler {
       item.nextElementSibling.hidden = true;
       if(!this.options.wasInited){
         item.addEventListener('click', () => {
+          if(!this.spoiler.classList.contains('is-init')){
+            return 0
+          }
           if(item.classList.contains('active')){
             this.closeSpoiler([item])
           } else {
@@ -96,7 +99,6 @@ class YurgenSpoiler {
 
   openSpoiler(spoiler){
     if(this.options.accordion){
-      console.log(this.options.openedSpoiler)
       if(this.options.openedSpoiler.length){
         this.closeSpoiler(this.options.openedSpoiler)
       }
@@ -112,7 +114,6 @@ class YurgenSpoiler {
       slideClose(item.nextElementSibling);
       this.options.openedSpoiler.splice(this.options.openedSpoiler.indexOf(item),1)
     })
-    console.log(this.options.openedSpoiler)
   }
 }
 

@@ -1,3 +1,5 @@
+let timerOpen = null;
+let timerClose = null;
 function slideOpen(target, duration = 500){
   if(target.classList.contains('is-closing')){
     target.classList.remove('is-closing');
@@ -20,22 +22,16 @@ function slideOpen(target, duration = 500){
       height = target.offsetHeight;
       target.style.height = '0px';
     }
-    target.style.paddingTop = 0;
-    target.style.paddingBottom = 0;
-    target.style.marginTop = 0;
-    target.style.marginBottom = 0;
     target.offsetHeight;
     target.style.transitionProperty = "height, margin, padding";
     target.style.transitionDuration = duration + 'ms';
     target.style.height = height + 'px';
-    target.style.removeProperty('padding-top');
-    target.style.removeProperty('padding-bottom');
-    target.style.removeProperty('margin-top');
-    target.style.removeProperty('margin-bottom');
-    setTimeout(() => {
+
+    clearTimeout(timerOpen);
+    timerOpen = setTimeout(() => {
       if(target.classList.contains('is-opening')){
-        target.classList.remove('is-opening')
-        target.removeAttribute('style')
+        target.classList.remove('is-opening');
+        target.removeAttribute('style');
       }
     }, duration)
   }
@@ -55,11 +51,9 @@ function slideClose(target, duration=500) {
     target.offsetHeight;
     target.style.overflow = 'hidden';
     target.style.height = '0px';
-    target.style.paddingTop = 0;
-    target.style.paddingBottom = 0;
-    target.style.marginTop = 0;
-    target.style.marginBottom = 0;
-    setTimeout(() => {
+
+    clearTimeout(timerClose);
+    timerClose = setTimeout(() => {
       if(target.classList.contains('is-closing')){
         target.hidden = true;
         target.removeAttribute('style')
