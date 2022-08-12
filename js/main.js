@@ -1,5 +1,5 @@
-let timerOpen = null;
-let timerClose = null;
+let timeoutOpening = null;
+let timeoutClosing = null;
 function slideOpen(target, duration = 500){
   if(target.classList.contains('is-closing')){
     target.classList.remove('is-closing');
@@ -27,8 +27,9 @@ function slideOpen(target, duration = 500){
     target.style.transitionDuration = duration + 'ms';
     target.style.height = height + 'px';
 
-    clearTimeout(timerOpen);
-    timerOpen = setTimeout(() => {
+    clearTimeout(timeoutOpening);
+    clearTimeout(timeoutClosing);
+    timeoutOpening = setTimeout(() => {
       if(target.classList.contains('is-opening')){
         target.classList.remove('is-opening');
         target.removeAttribute('style');
@@ -52,8 +53,9 @@ function slideClose(target, duration=500) {
     target.style.overflow = 'hidden';
     target.style.height = '0px';
 
-    clearTimeout(timerClose);
-    timerClose = setTimeout(() => {
+    clearTimeout(timeoutOpening);
+    clearTimeout(timeoutClosing);
+    timeoutClosing = setTimeout(() => {
       if(target.classList.contains('is-closing')){
         target.hidden = true;
         target.removeAttribute('style')
