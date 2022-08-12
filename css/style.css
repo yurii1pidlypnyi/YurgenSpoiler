@@ -15,19 +15,18 @@ ul li{list-style: none;}
 img{vertical-align: top;}
 h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: inherit;}
 /*--------------------*/
-
 body {
   background: url('../img/bg.png');
   -webkit-tap-highlight-color: transparent;
 }
-
 .wrapper {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   min-height: 100%;
   row-gap: 30px;
 }
-
 .spollers {
   width: 100%;
   max-width: 800px;
@@ -40,7 +39,6 @@ body {
   background-color: #A9D6DF;
   color: #15263c;
 }
-
 .spollers__title {
   position: relative;
   display: flex;
@@ -57,14 +55,12 @@ body {
 .spollers__body p {
   padding: 20px 15px;
 }
-
 .is-init .spollers__title {
   padding: 10px 45px 10px 15px;
   border-bottom: 1px solid transparent;
   cursor: pointer;
   pointer-events: all;
 }
-
 .is-init .spollers__title::before,
 .is-init .spollers__title::after{
   content: "";
@@ -77,24 +73,19 @@ body {
   transition: transform 0.5s ease 0s;
   border-radius: 5px;
 }
-
 .is-init .spollers__title::before {
   border-radius: 5px;
   transform: translate(-70%, -50%) rotate(40deg);
 }
-
 .is-init .spollers__title::after {
   transform: translate(0, -50%) rotate(-40deg);
 }
-
 .is-init .spollers__title.active {
   border-bottom: 1px solid rgba(131, 168, 175, 0.3);
 }
-
 .is-init .spollers__title.active::before {
   transform: translate(-70%,-50%) rotate(-40deg);
 }
-
 .is-init .spollers__title.active::after {
   transform: translate(0, -50%) rotate(40deg);
 }

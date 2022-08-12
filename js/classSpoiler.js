@@ -6,10 +6,13 @@ class YurgenSpoiler {
     this.fillOptions();
 
     if(this.options.type === 'simple'){
-      this.initSpoiler()
+      this.initSpoiler();
     }
     if(this.options.type === 'media'){
-      this.createMediaQuery()
+      this.createMediaQuery();
+    }
+    if(this.options.missClick){
+      this.missClick();
     }
   }
 
@@ -24,7 +27,7 @@ class YurgenSpoiler {
             this.options.wasInited = false;
             this.mediaQuery = dataList[attr];
           }else {
-            this.options.type = 'simple'
+            this.options.type = 'simple';
           }
         break
         case 'accordion' : 
@@ -39,8 +42,8 @@ class YurgenSpoiler {
   }
 
   initSpoiler(){
-      this.initSpollerBody()
-      this.spoiler.classList.add('is-init')
+      this.initSpollerBody();
+      this.spoiler.classList.add('is-init');
   }
 
   initSpollerBody(){
@@ -53,9 +56,9 @@ class YurgenSpoiler {
             return 0
           }
           if(item.classList.contains('active')){
-            this.closeSpoiler([item])
+            this.closeSpoiler([item]);
           } else {
-            this.openSpoiler(item)
+            this.openSpoiler(item);
           }
         })
       }
@@ -66,7 +69,7 @@ class YurgenSpoiler {
     let btnsSpoiler = this.spoiler.querySelectorAll('[data-spoller]');
     btnsSpoiler.forEach(item => {
       item.nextElementSibling.removeAttribute('hidden');
-      item.classList.remove('active')
+      item.classList.remove('active');
     })
     this.options.openedSpoiler = [];
     this.options.wasInited = true;
@@ -80,44 +83,55 @@ class YurgenSpoiler {
 
     this.mediaQuery = window.matchMedia(`(${mediaType}-width: ${mediaWidth}px)`);
     
-    this.checkMediaQuery()
+    this.checkMediaQuery();
 
     this.mediaQuery.addEventListener('change',() => {
-      this.checkMediaQuery()
+      this.checkMediaQuery();
     })
   }
 
   checkMediaQuery(){
     if(this.mediaQuery.matches){
-      this.initSpoiler()
+      this.initSpoiler();
     }
 
     if(!this.mediaQuery.matches && this.spoiler.classList.contains('is-init')){
-      this.cancelInitSpoiler()
+      this.cancelInitSpoiler();
     }
   }
 
   openSpoiler(spoiler){
     if(this.options.accordion){
       if(this.options.openedSpoiler.length){
-        this.closeSpoiler(this.options.openedSpoiler)
+        this.closeSpoiler(this.options.openedSpoiler);
       }
     }
     spoiler.classList.add('active');
     slideOpen(spoiler.nextElementSibling);
-    this.options.openedSpoiler.push(spoiler)
+    this.options.openedSpoiler.push(spoiler);
   }
 
   closeSpoiler(array){
     array.forEach(item => {
       item.classList.remove('active');
       slideClose(item.nextElementSibling);
-      this.options.openedSpoiler.splice(this.options.openedSpoiler.indexOf(item),1)
+      this.options.openedSpoiler.splice(this.options.openedSpoiler.indexOf(item),1);
+    })
+  }
+
+  missClick() {
+    document.addEventListener('click', (e) => {
+      let target = e.target;
+      if(this.spoiler.classList.contains('is-init')){
+        if(this.spoiler === target || target.closest('[data-spollers]') !== this.spoiler){
+          this.closeSpoiler(this.options.openedSpoiler);
+        }
+      }
     })
   }
 }
 
 let spoiler = document.querySelectorAll('[data-spollers]');
 spoiler.forEach(item => {
-  new YurgenSpoiler(item)
+  new YurgenSpoiler(item);
 })
